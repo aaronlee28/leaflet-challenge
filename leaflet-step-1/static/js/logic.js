@@ -13,13 +13,14 @@ var lightMap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{
 });
 
 // Create the map object with options
-var map = L.map("mapid", {
+var map = L.map("map-id", {
     center: [40.73, -74.0059],
     zoom: 3,
     layers: [lightMap, earthquakes]
 });
 
 d3.json(url, function(quakeData){
+    console.log(quakeData);
     function markerSize (magniture){
         return magnitude * 4;
 };
@@ -42,7 +43,7 @@ d3.json(url, function(quakeData){
 
 L.geoJSON(quakeData, {
     layer: function (feature,coordinate){
-        return L.marker(coordinate,
+        return L.Marker(coordinate,
             {
                 radius: markerSize(feature.properties.mag),
                 fillColor: color(feature.geometry.coordinates[2]),
@@ -54,6 +55,7 @@ L.geoJSON(quakeData, {
         );
     },
     onEachFeature: function(feature, layer) {
+        console.log(feature);
         layer.bindPopup("<h3>Location: " + feature.properties.place + "</h3><hr><p>Date: "
         + new Date(feature.properties.time) + "</p><hr><p>Magnitude: " + feature.properties.mag + "</p>");
     }
