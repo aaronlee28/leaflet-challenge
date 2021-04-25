@@ -22,14 +22,14 @@ var map = L.map("map-id", {
 d3.json(url, function(quakeData){
     console.log(quakeData);
     function markerSize (magniture){
-        return magnitude * 4;
+        return magnitude * 3;
 };
     function chooseColor(depth){
         switch(true){
             case depth > 90:
                 return "red";
         case depth > 70:
-            return "darkorange";
+            return "orangered";
         case depth > 50:
             return "orange";
         case depth > 30:
@@ -42,8 +42,8 @@ d3.json(url, function(quakeData){
     }
 
 L.geoJSON(quakeData, {
-    layer: function (feature,coordinate){
-        return L.Marker(coordinate,
+    layer: function (feature, coordinate){
+        return L.heatLayer(coordinate,
             {
                 radius: markerSize(feature.properties.mag),
                 fillColor: color(feature.geometry.coordinates[2]),
