@@ -19,7 +19,7 @@ var map = L.map("map-id", {
     layers: [lightmap, earthquakes]
 });
 
-d3.json(url, function(earthquakeData){
+d3.json(url, function(quakeData){
     function markerSize (magniture)
         return magnitude * 4;
 };
@@ -39,92 +39,24 @@ d3.json(url, function(earthquakeData){
         return "green";
         }
     }
+
+L.geoJSON(quakeData, {
+    layer: function (feature,coordinate){
+        return L.marker(coordinate,
+            {
+                radius: markerSize(feature.properties.mag),
+                fillColor: color(feature.geometry.coordinates[2]),
+                opacity: 0.5,
+                weight: 0.5,
+                color: "black",
+                stroke: true
+            }
+        );
+    },
+    
+})
+    
 )
 
 
 
-// Add our 'lightmap' tile layer to the map
-lightmap.addTo(map);
-
-
-
-function createMap(earthquakes) {
-
-
-
-    // Create a baseMaps object to hold the lightmap layers 
-    var baseMaps = {
-        "Light Map": lightmap
-    };
-
-    // Create an overlayMaps object to hold the bikeStations layer
-    var overlayMaps = {
-        "Earthquakes": Earthquakes
-    };
-
-
-
-    // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
-    L.control.layers(baseMaps, overlayMaps, {
-        collapsed: false
-    }).addTo(map);
-    }
-
-
-
-
-
-
-    d3.json(queryUrl, function(data) {
-    
-      createFeatures(data.features);
-      console.log(data.features)
-    });
-    
-    function createFeatures(earthquakeData) {
-    
-      function onEachFeature(feature, layer) {
-        layer.bindPopup("<h3>" + feature.properties.place +
-          "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
-      }
-    
-      function radiusSize(magnitude) {
-        return magnitude * 20000;
-      }
-    
-    
-      function circleColor(magnitude) {
-        if (magnitude < 1) {
-          return "#ccff33"
-        }
-        else if (magnitude < 2) {
-          return "#ffff33"
-        }
-        else if (magnitude < 3) {
-          return "#ffcc33"
-        }
-        else if (magnitude < 4) {
-          return "#ff9933"
-        }
-        else if (magnitude < 5) {
-          return "#ff6633"
-        }
-        else {
-          return "#ff3333"
-        }
-      }
-    
-    
-      var earthquakes = L.geoJSON(earthquakeData, {
-        pointToLayer: function(earthquakeData, latlng) {
-          return L.circle(latlng, {
-            radius: radiusSize(earthquakeData.properties.mag),
-            color: circleColor(earthquakeData.properties.mag),
-            fillOpacity: 1
-          });
-        },
-        onEachFeature: onEachFeature
-      });
-    
-      createMap(earthquakes);
-    }
