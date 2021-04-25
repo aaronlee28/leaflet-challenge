@@ -1,3 +1,9 @@
+// URL 
+var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson"
+
+// layerGroups for earthquake 
+var earthquakes = new.L.LayerGroup();
+
 // Create the tile layer that will be the background of our map 
 var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
@@ -6,8 +12,41 @@ var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{
     accessToken: API_KEY
 });
 
-// layerGroups for earthquake 
-var earthquakes = new.L.LayerGroup();
+// Create the map object with options
+var map = L.map("map-id", {
+    center: [40.73, -74.0059],
+    zoom: 3,
+    layers: [lightmap, earthquakes]
+});
+
+d3.json(url, function(earthquakeData){
+    function markerSize (magniture)
+        return magnitude * 4;
+};
+    function chooseColor(depth){
+        switch(true){
+            case depth > 90:
+                return "red";
+        case depth > 70:
+            return "darkorange";
+        case depth > 50:
+            return "orange";
+        case depth > 30:
+            return "yellow";
+        case depth > 10:
+            return "lightgreen";
+        default:
+        return "green";
+        }
+    }
+)
+
+
+
+// Add our 'lightmap' tile layer to the map
+lightmap.addTo(map);
+
+
 
 function createMap(earthquakes) {
 
@@ -23,12 +62,7 @@ function createMap(earthquakes) {
         "Earthquakes": Earthquakes
     };
 
-    // Create the map object with options
-    var map = L.map("map-id", {
-        center: [40.73, -74.0059],
-        zoom: 3,
-        layers: [lightmap, earthquakes]
-    });
+
 
     // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
     L.control.layers(baseMaps, overlayMaps, {
@@ -39,7 +73,6 @@ function createMap(earthquakes) {
 
 
 
-    var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson"
 
 
     d3.json(queryUrl, function(data) {
