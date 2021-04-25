@@ -21,7 +21,7 @@ var map = L.map("map-id", {
 
 d3.json(url, function(quakeData){
     console.log(quakeData);
-    function circleSize (magniture){
+    function markerSize (magniture){
         return magnitude * 3;
 };
     function chooseColor(depth){
@@ -43,9 +43,9 @@ d3.json(url, function(quakeData){
 
 L.geoJSON(quakeData, {
     layer: function (feature, coordinate){
-        return L.circle(coordinate,
+        return L.circleMarker(coordinate,
             {
-                radius: circleSize(feature.properties.mag),
+                radius: markerSize(feature.properties.mag),
                 fillColor: color(feature.geometry.coordinates[2]),
                 opacity: 0.5,
                 weight: 0.5,
