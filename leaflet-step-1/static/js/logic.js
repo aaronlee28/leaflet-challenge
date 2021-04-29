@@ -21,7 +21,7 @@ var map = L.map("map-id", {
 
 d3.json(url, function(quakeData){
     console.log(quakeData);
-    function markerSize (magniture){
+    function markerSize(magnitude){
         return magnitude * 3;
 };
     function chooseColor(depth){
@@ -35,7 +35,7 @@ d3.json(url, function(quakeData){
         case depth > 30:
             return "yellow";
         case depth > 10:
-            return "lightgreen";
+            return "yellowgreen";
         default:
         return "green";
         }
@@ -56,7 +56,7 @@ L.geoJSON(quakeData, {
     },
     onEachFeature: function(feature, layer) {
         console.log(feature);
-        layer.bindPopup("<h3>Location: " + feature.properties.place + "</h3><hr><p>Date: "
+        layer.bindPopup("<h3>" + feature.properties.place + "</h3><hr><p>Date: "
         + new Date(feature.properties.time) + "</p><hr><p>Magnitude: " + feature.properties.mag + "</p>");
     }
 }).addTo(earthquakes);
