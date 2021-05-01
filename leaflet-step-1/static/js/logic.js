@@ -43,10 +43,10 @@ d3.json(url, function(quakeData){
 
 L.geoJSON(quakeData, {
     layer: function (feature, coordinate){
-        return L.circleMarker(coordinate,
+        return L.circle(coordinate,
             {
-                radius: markerSize(feature.properties.mag),
-                fillColor: color(feature.geometry.coordinates[2]),
+                radius:feature.properties.mag*15000,
+                fillColor: chooseColor(feature.geometry.coordinates[2]),
                 opacity: 0.5,
                 weight: 0.5,
                 color: "black",
